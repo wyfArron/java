@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:s="http://www.erayt.com/schema/solar/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
+			http://www.erayt.com/schema/solar/core
+			http://www.erayt.com/schema/solar/3.0/solar-spring.xsd"
+	default-autowire="byName">
+	
+	<!-- 生成验证码    -->
+	<s:service id="/random.action">
+		<s:bean ref="workerService" method="generateCode" parameters="MESSAGE" />
+	</s:service>
+	
+	<!-- 验证动态验证码   -->
+	<s:service id="/checkCode.action">
+		<s:bean ref="workerService" method="checkCode" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 验证短信发送相关，用户名、证件号、以及验证码接口   -->
+	<s:service id="/checkSmsParamAndCode.action">
+		<s:bean ref="workerService" method="checkSmsParamAndCode" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	
+	<s:service id="/checkSmsParamAndCodeNoEncrypt.action">
+		<s:bean ref="workerService" method="checkSmsParamAndCode" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	
+	<!-- 首次登录验证短信验证码     -->
+	<s:service id="/firstLoginCheckSms.action">
+		<s:bean ref="workerService" method="firstLoginCheckSms" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 登录验证   -->
+	<s:service id="/login.action">
+		<s:bean ref="workerLoginService" method="login" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>  
+	
+	<!-- 登录验证不加密   -->
+	<s:service id="/loginNoEncrypt.action">
+		<s:bean ref="workerLoginService" method="login" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>  
+	
+	
+	<!-- 检测用户名是否已经被占用   -->
+	<s:service id="/checkUser.action">
+		<s:bean ref="workerService" method="checkUser" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>  
+	
+	<!-- 首次登录需要修改用户名和密码   -->
+	<s:service id="/doUpdateUser.action">
+		<s:bean ref="workerModifyService" method="doUpdateUser" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 获取短信验证码   -->
+	<s:service id="/getInfoMessage.action">
+		<s:bean ref="workerService" method="getInfoMessage" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<s:service id="/getInfoMessageNoEncrypt.action">
+		<s:bean ref="workerService" method="getInfoMessage" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 修改交易密码和登录密码   -->
+	<s:service id="/doUpdatePassword.action">
+		<s:bean ref="workerModifyService" method="doUpdatePassword" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 获取短信验证码   -->
+	<s:service id="/getUserName.action">
+		<s:bean ref="workerService" method="getUserName" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 重值密码,用于忘记密码   -->
+	<s:service id="/resetPassword.action">
+		<s:bean ref="workerModifyService" method="doResetPassword" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 重值密码,用于忘记密码。重置密码   -->
+	<s:service id="/resetPasswordNoEncrypt.action">
+		<s:bean ref="workerModifyService" method="doResetPassword" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 获取渠道客户端版本号    -->
+	<s:service id="/getClientVersion.action">
+		<s:bean ref="workerService" method="getClientVersion"   parameters="@requestJson"  result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 获取最新的ticket    -->
+	<s:service id="/getClientTicket.action">
+		<s:bean ref="workerService" method="getClientTicket"  parameters="@requestJson,MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 切换语言    -->
+	<s:service id="/changLan.action">
+		<s:bean ref="workerService" method="changLan" parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>  
+	
+	<!-- 新增设备到安全信息表    -->
+	<s:service id="/safeData.action">
+		<s:bean ref="workerService" method="doSafeData"  parameters="@requestJson,MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- 用户退出    -->
+	<s:service id="/loginout.action">
+		<s:bean ref="workerService" method="loginout"  parameters="MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!-- session存在检测    -->
+	<s:service id="/sustained.action">
+		<s:bean ref="workerService" method="sustained"  parameters="MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!--  设置手势密码     -->
+	<s:service id="/setMpPassWord.action">
+		<s:bean ref="workerModifyService" method="doMpPassWord"  parameters="@requestJson,MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!--  获取手势密码开关状态      -->
+	<s:service id="/getMpasswordType.action">
+		<s:bean ref="workerService" method="getMpasswordType"  parameters="MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!--  登录密码验证      -->
+	<s:service id="/checkPassWord.action">
+		<s:bean ref="workerService" method="checkPassWord"  parameters="@requestJson,MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+    <!--  验证手势密码      -->
+	<s:service id="/checkMpassword.action">
+		<s:bean ref="workerService" method="checkMpassword"  parameters="@requestJson,MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!--  切换手势密码界面判断接口      -->
+	<s:service id="/hasMpassword.action">
+		<s:bean ref="workerService" method="hasMpassword"  parameters="MESSAGE"   result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!--  获取aes 密钥      -->
+	<s:service id="/setAESEncrypt.action">
+		<s:bean ref="workerService" method="setAESEncrypt"  parameters="@requestJson,MESSAGE" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+	<!--  获取  文件升级 Version      -->
+	<s:service id="/getUpdateVersion.action">
+		<s:bean ref="workerVersionService" method="getUpdateVersion" parameters="@requestJson" result="vo"/>
+		<s:message-filter vars="vo"/>
+	</s:service>
+	
+</beans>
